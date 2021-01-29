@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intermediate JS Assignment 2</title>
+  
+  <!--
+    //////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                  //
+    //        @@@@@@    @@@@@@   @@@  @@@  @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@        //
+    //       @@@@@@@   @@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@       //
+    //       !@@       @@!  @@@  @@!@!@@@  @@!  @@@  @@!       @@!       @@!  @@@       //
+    //       !@!       !@!  @!@  !@!!@!@!  !@!  @!@  !@!       !@!       !@!  @!@       //
+    //        !!@@!!   @!@!@!@!  @!@ !!@!  @!@  !@!  @!!!:!    @!!!:!    @!@@!@!        //
+    //        !!@!!!   !!!@!!!!  !@!  !!!  !@!  !!!  !!!!!:    !!!!!:    !!@!!!         //
+    //            !:!  !!:  !!!  !!:  !!!  !!:  !!!  !!:       !!:       !!:            //
+    //            !:!  :!:  !:!  :!:  !:!  :!:  !:!  :!:       :!:       :!:            //
+    //       :::: ::   ::   :::  ::   ::   :::: ::   :: ::::   :: ::::   ::             //
+    //       :: : :    :    ::   ::   :    :: : :    : :: ::   : :: ::   :              //
+    //                                                                                  //
+    //       WDD Intrmediate JavaScript                                                 //
+    //       File: Intermediate JavaScript Assignment 2                                 //
+    //       Instructor: Brent Scott                                                    //
+    //                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////
+    -->
+  
+  <style>
+    /* CSS rule for body tag. */
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+    }
+    
+    /* CSS rule for div tag */
+    div{
+      margin-bottom: 15px;
+    }
+    
+    /* CSS rule for label tag */
+    label{
+      float: left;
+      width: 150px;
+    }
+    
+    /* CSS rule to get '*' before mandatory labels */
+    label.mandat::before{
+      content: '*';
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #c00;
+    }
+    
+  </style>
+  
+  <script>
+    
+    // Creating a function to validate E-Mail
+    function validateEmail(email_obj){
+      
+      // catching the value entered by user in the email field.
+      var email_address = email_obj.value;
+      // Fetching the index value of '@' symbol.
+      var at_pos = email_address.indexOf("@");
+      // Fetching the value of '.' character.
+      var dot_pos = email_address.indexOf(".");
+      
+      // Condition to verify if user has entered '@' and '.'
+      if(at_pos == -1 || dot_pos == -1){
+        alert("Your email address must contain '@' symbol and '.' character.");
+        // Heighlight the field if above condition is true.
+        email_obj.select();
+        return false;
+      }
+      
+      // @ and . should not appear on mentioned positions in function.
+      if(at_pos == 0 || at_pos == email_address.length-1 || at_pos == email_address.length-2 ||
+         dot_pos == 0 || dot_pos == email_address.length-1 || dot_pos == email_address.length-2){
+        alert("Your email address seems to be incorrect. Please correct and re-submit.");
+        // Heighlight the field if above condition is true.
+        email_obj.select();
+        return false;
+      }
+      
+      return true;
+    }
+    
+    // Creating a function to validate phone number.
+    function validatePhonenumber(phone_obj){
+      // Taking phone number's value in a variable for checking it against multiple conditions.
+      var phone_number = phone_obj.value;
+      
+      //var hyp_pos = phone_number.indexOf("-");
+      //var hyp_pos_2 = phone_number.lastIndexOf("-");
+      
+      // Function will proceed only if phone number's length is 12 characters.
+      if(phone_number.length == 12){
+        
+        // Using three variables to break the phone number in three different strings.
+        var no_sp_char1 = phone_number.substr(0,3);
+        var no_sp_char2 = phone_number.substr(4,3);
+        var no_sp_char3 = phone_number.substr(8,4);
+        
+        //if(hyp_pos != phone_number.length-9 || hyp_pos_2 != phone_number.length-5)
+        
+        // Checking if the value in the variables is not a number.
+        if(isNaN(no_sp_char1) || isNaN(no_sp_char2) || isNaN(no_sp_char3)){
+          alert("Please enter a correct phone number.");
+          // Heighlight the field if above condition is true.
+          phone_obj.select();
+          return false;
+        }
+        return true;
+      }
+      // If entered phone number exceeds the limit of 12 character.
+      else{
+        alert("Phone number's length must be 10 digits. It should be formated as 'xxx-xxx-xxxx' where 'x' must be a number.");
+        // Heighlight the field if else condition is true.
+        phone_obj.select();
+        return false;
+      }
+    }
+    
+    // Creating a function to add hyphen as the user types in the phone number.
+    function addHyphen(){
+      
+      // As the user releases the pressed key, value will be picked in the following variable.
+      var add_hyp = document.getElementById("tel_no").value;
+      
+      // Trying to remove '-' if user enters by mistake.
+      //add_hyp = add_hyp.value.split('-').join('');
+      
+      // Adding '-' when the user has typed three or seven characters.
+      if(add_hyp.length == 3 || add_hyp.length == 7){
+        // Concatenate '-' to the string.
+        add_hyp = add_hyp + '-';
+        // Sending the value back to the field.
+        document.getElementById("tel_no").value = add_hyp;
+      }
+    }
+    
+    // Checking basic form validation where fields are mandatory.
+    function createCookie(form_obj){
+      
+      // Creating an array to check if mandatory fields have some values.
+      var mandat_fields = new Array();
+      mandat_fields[0] = form_obj.elements["first_name"].value;
+      mandat_fields[1] = form_obj.elements["last_name"].value;
+      mandat_fields[2] = form_obj.elements["email_id"].value;
+      mandat_fields[3] = form_obj.elements["tel_no"].value;
+      
+      // If mandatory fields are blank than code will not proceed further.
+      for(i = 0; i < mandat_fields.length; i++){
+        if(mandat_fields[i] == ''){
+          alert("Fields marked with '*' are mandatory.");
+          return false;
+        }
+      }
+      
+      // Following check only works if user enters only digits in the fields.
+      if(!isNaN(mandat_fields[0]) || !isNaN(mandat_fields[1])){
+        alert("First name and Last name field should not contain only digits.");
+        return false;
+      }
+      
+      // Catching the value returned from validateEmail function.
+      var correct_email = validateEmail(document.getElementById('email_id'));
+      // If value is true proceed further.
+      if(correct_email){
+        // Catching the value returned from validatePhonenumber function.
+        var correct_phone = validatePhonenumber(document.getElementById('tel_no'));
+        // If value is true proceed further.
+        if(correct_phone){
+          // Action element to be triggered on form submission.
+          //form_obj.action = "http://scott-media.com/test/form_display.php";
+          //form_obj.submit();
+          
+          // Creating a variable that will contain cookie string.
+          var cookie_value = "FirstName::" + mandat_fields[0] + "--LastName::" + mandat_fields[1] + "--Email::" + mandat_fields[2] + "--Contact::" + mandat_fields[3];
+          
+          // Encoding the special characters in cookie.
+          cookie_value = encodeURIComponent(cookie_value);
+          
+          // Getting the current date in a new variable.
+          var exp_date = new Date();
+          
+          // Update the date variable to 2 months in future.
+          exp_date.setFullYear(exp_date.getFullYear()+2);
+          
+          // Set the expiry date of the created cookie
+          document.cookie = "Final_Cookie=" + cookie_value + ";expires=" + exp_date.toUTCString();
+          alert(document.cookie);
+        }
+      }
+    }
+    
+    // Creating month array list.
+    var month_list = new Array();
+    month_list[0] = "January";
+    month_list[1] = "February";
+    month_list[2] = "March";
+    month_list[3] = "April";
+    month_list[4] = "May";
+    month_list[5] = "June";
+    month_list[6] = "July";
+    month_list[7] = "August";
+    month_list[8] = "September";
+    month_list[9] = "October";
+    month_list[10] = "November";
+    month_list[11] = "December";
+    
+    // Creating weekday array list.
+    var weekday_list = new Array();
+    weekday_list[0] = "Sunday";
+    weekday_list[1] = "Monday";
+    weekday_list[2] = "Tuesday";
+    weekday_list[3] = "Wednesday";
+    weekday_list[4] = "Thursday";
+    weekday_list[5] = "Friday";
+    weekday_list[6] = "Saturday";
+    
+    // Creatind a variable to display date when required.
+    var date_display = '';
+    
+    // Creating a function to that will called on page load.
+    function currentTime(){
+      // Getting the current date and storing it in anew variable.
+      var present_date = new Date();
+      // Extracting full year from received current date.
+      var present_year = present_date.getFullYear();
+      
+      // Extracting current month from received current date.
+      var present_month = present_date.getMonth();
+      // Displaying the month name from received number.
+      var month_name = month_list[present_month];
+      
+      // Extracting current day from received current date.
+      var present_weekday = present_date.getDay();
+      // Displaying the weekday name from received number.
+      var weekday_name = weekday_list[present_weekday];
+      
+      // Extracting current date from received current date.
+      var today_date = present_date.getDate();
+      
+      // Arranging the date in proper format to be displayed
+      date_display = weekday_name + ", " + month_name + " " + today_date + ", " + present_year;
+      
+      // Extracting current hour minute second from current date.
+      var present_hour = present_date.getHours();
+      var present_minute = present_date.getMinutes();
+      var present_second = present_date.getSeconds();
+      var present_time = present_date.getTime(); 
+      var am_pm;
+      
+      // Checking hour to set AM or PM.
+      if(present_hour > 12){
+        am_pm = "PM";
+      }
+      else{
+        am_pm = "AM";
+      }
+      
+      // Convertin time 24 hrs format to 12 hr format.
+      if(present_hour > 12){
+        present_hour -= 12;
+      }
+      
+      //  As 0 in 24 hrs format is 12, so reinitialising it back.
+      if(present_hour == 0){
+        present_hour = 12;
+      }
+      
+      // It would be good to 0 if minutes are in single digit.
+      if(present_minute < 10){
+        present_minute = "0" + present_minute;
+      }
+      
+      // It would be good to 0 if seconds are in single digit.
+      if(present_second < 10){
+        present_second = "0" + present_second;
+      }
+      
+      // Getting the formated time in varibale that needs to be displayed on page.
+      var time_display = present_hour + ":" + present_minute + ":" + present_second + " " + am_pm;
+      // Date time needs to be displayed on page.
+      var form_timer = document.getElementById("timer");
+      
+      // Date and Time that will be visible on page.
+      form_timer.innerHTML = date_display + " " + time_display;
+    }
+    
+    // Calling a onload function that will help refresh time every second.
+    onload = function(){
+      currentTime();
+      my_interval = setInterval('currentTime()',1000);
+    }
+    
+  </script>
+  
+</head>
+
+<body>
+  <!-- Page level heading 1 -->
+  <h1>Want Your Own Cookie!!!</h1>
+  <!-- Div tag to display time -->
+  <div id="timer"></div>
+  <!-- Page form -->
+  <form method="post" id="js_form" name="js_form" novalidate>
+    <fieldset>
+     <legend>Personal Info Cookie</legend>
+      <!-- div tag for First Name field -->
+      <div>
+        <label class="mandat" for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" required />
+      </div>
+      
+      <!-- div tag for Last name field -->
+      <div>
+        <label class="mandat" for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required />
+      </div>
+      
+      <!-- div tag for email ID -->
+      <div>
+        <label class="mandat" for="email_id">Email ID:</label>
+        <input type="email" id="email_id" name="email_id" required />
+      </div>
+      
+      <!-- div tag for phone number and invoking onkeyup event for adding '-' in the field -->
+      <div>
+        <label class="mandat" for="tel_no">Phone No.:</label>
+        <input type="tel" id="tel_no" name="tel_no" onkeyup="addHyphen()" required />
+      </div>
+      
+      <!-- div tags for button group and invoking first form function -->
+      <div id="btn_align">
+        <input type="button" value="Save Cookie" onclick="createCookie(this.form)" /> &nbsp; 
+        <input type="reset" value="Clear Form" /> &nbsp; 
+        <input type="button" value="View Cookie" onclick="window.location.href='21128_2001_assignment2_Pardeshi_Sandeep_Read.html'" />
+      </div>
+      
+    </fieldset>
+    
+  </form>
+  
+  <!-- This tag is only visible in case user disables the java script -->
+  <noscript>
+    <p>I humbly request you to turn on the Java Script or you won't be able to submit this form.</p>
+  </noscript>
+  
+</body>
+</html>

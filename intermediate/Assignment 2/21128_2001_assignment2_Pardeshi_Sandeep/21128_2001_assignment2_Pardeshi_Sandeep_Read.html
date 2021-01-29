@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intermediate JS Assignment 2</title>
+  
+  <!--
+    //////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                  //
+    //        @@@@@@    @@@@@@   @@@  @@@  @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@        //
+    //       @@@@@@@   @@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@       //
+    //       !@@       @@!  @@@  @@!@!@@@  @@!  @@@  @@!       @@!       @@!  @@@       //
+    //       !@!       !@!  @!@  !@!!@!@!  !@!  @!@  !@!       !@!       !@!  @!@       //
+    //        !!@@!!   @!@!@!@!  @!@ !!@!  @!@  !@!  @!!!:!    @!!!:!    @!@@!@!        //
+    //        !!@!!!   !!!@!!!!  !@!  !!!  !@!  !!!  !!!!!:    !!!!!:    !!@!!!         //
+    //            !:!  !!:  !!!  !!:  !!!  !!:  !!!  !!:       !!:       !!:            //
+    //            !:!  :!:  !:!  :!:  !:!  :!:  !:!  :!:       :!:       :!:            //
+    //       :::: ::   ::   :::  ::   ::   :::: ::   :: ::::   :: ::::   ::             //
+    //       :: : :    :    ::   ::   :    :: : :    : :: ::   : :: ::   :              //
+    //                                                                                  //
+    //       WDD Intrmediate JavaScript                                                 //
+    //       File: Intermediate JavaScript Assignment 2                                 //
+    //       Instructor: Brent Scott                                                    //
+    //                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////
+    -->
+  
+  <style>
+    /* CSS rule for body tag. */
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      background-image: url('back.jpg');
+    }
+    h1{
+      text-align: center;
+      margin-top: 80px;
+      color: #fff;
+    }
+    #wrapper{
+      margin: 0 auto;
+      width:500px;
+      background-color: azure;
+      padding: 40px 20px 60px 20px;
+      margin-top: 50px;
+      border: 3px solid #003263;
+    }
+    #timer{
+      text-align: center;
+      font-size: 26px;
+      color: #011e3b;
+    }
+    /* CSS rule for div tag */
+    div{
+      margin-bottom: 15px;
+    }
+    
+    /* CSS rule for label tag */
+    label{
+      float: left;
+      width: 150px;
+    }
+    
+    /* CSS rule to get '*' before mandatory labels */
+    label.mandat::before{
+      content: '*';
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #c00;
+    }
+    .buttn{
+      background: #034180;
+      padding: 11px 22px;
+      border-radius: 12px;
+      box-shadow: 0 8px 6px -6px black;      
+      letter-spacing: 1px;
+      color: #fff;
+      font-size: 16px;
+      vertical-align: middle;
+    }
+  </style>
+  
+  <script>
+    
+    function displayCookie(current_cookie){
+      //alert(current_cookie);
+      if(document.cookie != ''){
+        // Get existing cookie saved in a variable
+        var existing_cookie = document.cookie;
+        
+        // Extract the main cookie
+        var whole_cookie = existing_cookie.split(";");
+        //alert(whole_cookie);
+        var retrived_cookie = false;
+        
+        // Getting the information stored in retrived cookie variable that means we got the cookie.
+        for(i = 0; i < whole_cookie.length; i++){
+          if(whole_cookie[i].indexOf(current_cookie) != -1){
+            retrived_cookie = whole_cookie[i];
+            break;
+          }
+        }
+        //alert(retrived_cookie);
+        // If no cookie found.
+        if(!retrived_cookie){
+          alert("The cookie you are looking for is not present.");
+          return;
+        }
+        // Spliting the cookie at = sign.
+        var disect_cookie = retrived_cookie.split("=");
+        // Storing the secong element of cookie.
+        var my_cookie = disect_cookie[1];
+        // Decoding the encoded special symbols.
+        my_cookie = decodeURIComponent(my_cookie);
+        // Spliting the cookie to get name and value pair.
+        var name_group = my_cookie.split("--");
+        // Creating a new array where we will get name values.
+        var actual_name = new Array();
+        // Now splitting the actual names from their tags.
+        for(i = 0; i < name_group.length; i++){
+          var split_group = name_group[i].split("::");
+          // assigning the name values to titles.
+          actual_name[split_group[0]] = split_group[1];
+          //alert(split_group[1]);
+        }
+        // Calling function that will display created cookie.
+        viewCookie(actual_name);
+      }
+      else{
+        alert("No cookie found in browser");
+      }
+    }
+    // Function to view cookie in form fields.
+    function viewCookie(show_name){
+      // Getting the form element to display created cookie.
+      var fill_form = document.getElementById("js_form");
+      // Submitting cookie information in the form fields.
+      fill_form.elements["first_name"].value = show_name["FirstName"];
+      fill_form.elements["last_name"].value = show_name["LastName"];
+      fill_form.elements["email_id"].value = show_name["Email"];
+      fill_form.elements["tel_no"].value = show_name["Contact"];
+    }
+    
+    // Function to delete existing cookie.
+    function eraseCookie(user_details){
+      // 
+      var form_details = document.getElementById("js_form");
+      // Getting the date in a variable.
+      var del_date = new Date();
+      // Getting a previous date so that we can delete cookie.
+      del_date.setDate(del_date.getDate()-1);
+      
+      // Setting the cookie to a previous date so that it gets auto deleted.
+      document.cookie = user_details + "=;expires=" + del_date.toUTCString();
+      // Removing field values so when cookie gets deleted.
+      form_details.elements["first_name"].value = "";
+      form_details.elements["last_name"].value = "";
+      form_details.elements["email_id"].value = "";
+      form_details.elements["tel_no"].value = "";
+    }
+    
+    // Creating month array list.
+    var month_list = new Array();
+    month_list[0] = "January";
+    month_list[1] = "February";
+    month_list[2] = "March";
+    month_list[3] = "April";
+    month_list[4] = "May";
+    month_list[5] = "June";
+    month_list[6] = "July";
+    month_list[7] = "August";
+    month_list[8] = "September";
+    month_list[9] = "October";
+    month_list[10] = "November";
+    month_list[11] = "December";
+    
+    // Creating weekday array list.
+    var weekday_list = new Array();
+    weekday_list[0] = "Sunday";
+    weekday_list[1] = "Monday";
+    weekday_list[2] = "Tuesday";
+    weekday_list[3] = "Wednesday";
+    weekday_list[4] = "Thursday";
+    weekday_list[5] = "Friday";
+    weekday_list[6] = "Saturday";
+    
+    // Creatind a variable to display date when required.
+    var date_display = '';
+    
+    // Creating a function to that will called on page load.
+    function currentTime(){
+      // Getting the current date and storing it in anew variable.
+      var present_date = new Date();
+      // Extracting full year from received current date.
+      var present_year = present_date.getFullYear();
+      
+      // Extracting current month from received current date.
+      var present_month = present_date.getMonth();
+      // Displaying the month name from received number.
+      var month_name = month_list[present_month];
+      
+      // Extracting current day from received current date.
+      var present_weekday = present_date.getDay();
+      // Displaying the weekday name from received number.
+      var weekday_name = weekday_list[present_weekday];
+      
+      // Extracting current date from received current date.
+      var today_date = present_date.getDate();
+      
+      // Arranging the date in proper format to be displayed
+      date_display = weekday_name + ", " + month_name + " " + today_date + ", " + present_year;
+      
+      // Extracting current hour minute second from current date.
+      var present_hour = present_date.getHours();
+      var present_minute = present_date.getMinutes();
+      var present_second = present_date.getSeconds();
+      var present_time = present_date.getTime(); 
+      var am_pm;
+      
+      // Checking hour to set AM or PM.
+      if(present_hour > 12){
+        am_pm = "PM";
+      }
+      else{
+        am_pm = "AM";
+      }
+      
+      // Convertin time 24 hrs format to 12 hr format.
+      if(present_hour > 12){
+        present_hour -= 12;
+      }
+      
+      //  As 0 in 24 hrs format is 12, so reinitialising it back.
+      if(present_hour == 0){
+        present_hour = 12;
+      }
+      
+      // It would be good to 0 if minutes are in single digit.
+      if(present_minute < 10){
+        present_minute = "0" + present_minute;
+      }
+      
+      // It would be good to 0 if seconds are in single digit.
+      if(present_second < 10){
+        present_second = "0" + present_second;
+      }
+      
+      // Getting the formated time in varibale that needs to be displayed on page.
+      var time_display = present_hour + ":" + present_minute + ":" + present_second + " " + am_pm;
+      // Date time needs to be displayed on page.
+      var form_timer = document.getElementById("timer");
+      
+      // Date and Time that will be visible on page.
+      form_timer.innerHTML = date_display + " " + time_display;
+    }
+    
+    // Calling a onload function that will help refresh time every second.
+    onload = function(){
+      currentTime();
+      my_interval = setInterval('currentTime()',1000);
+    }
+    
+  </script>
+  
+</head>
+
+<body>
+  <h1>Eat Up Your Cookie!!!</h1>
+
+ <div id="wrapper">
+  <!-- Page level heading 1 -->
+  <!-- Div tag to display time -->
+  <div id="timer"></div>
+  <!-- Page form -->
+  <form method="post" id="js_form" name="js_form" novalidate>
+      <fieldset>
+      <legend>View Cookie</legend>
+      <!-- div tag for First Name field -->
+      <div>
+        <label class="mandat" for="first_name">First Name:</label>
+        <input readonly type="text" id="first_name" name="first_name" required />
+      </div>
+      
+      <!-- div tag for Last name field -->
+      <div>
+        <label class="mandat" for="last_name">Last Name:</label>
+        <input readonly type="text" id="last_name" name="last_name" required />
+      </div>
+      
+      <!-- div tag for email ID -->
+      <div>
+        <label class="mandat" for="email_id">Email ID:</label>
+        <input readonly type="email" id="email_id" name="email_id" required />
+      </div>
+      
+      <!-- div tag for phone number and invoking onkeyup event for adding '-' in the field -->
+      <div>
+        <label class="mandat" for="tel_no">Phone No.:</label>
+        <input readonly type="tel" id="tel_no" name="tel_no" onkeyup="addHyphen()" required />
+      </div>
+      
+      <!-- div tags for button group and invoking first form function -->
+      <div>
+        <input class="buttn" id="display_cookie" type="button" value="Display Cookie" onclick="displayCookie('Final_Cookie');" /> &nbsp; 
+        <input class="buttn" type="button" value="Delete Cookie" onclick="eraseCookie('Final_Cookie')" />
+      </div>
+    </fieldset>
+  </form>
+  
+  <!-- This tag is only visible in case user disables the java script -->
+  <noscript>
+    <p>I humbly request you to turn on the Java Script or you won't be able to submit this form.</p>
+  </noscript>
+  </div>
+</body>
+</html>

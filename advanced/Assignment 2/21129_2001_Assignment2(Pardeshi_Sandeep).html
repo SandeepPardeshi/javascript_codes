@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Advanced JS Assignment 2</title>
+  
+  <!--
+    //////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                  //
+    //        @@@@@@    @@@@@@   @@@  @@@  @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@        //
+    //       @@@@@@@   @@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@       //
+    //       !@@       @@!  @@@  @@!@!@@@  @@!  @@@  @@!       @@!       @@!  @@@       //
+    //       !@!       !@!  @!@  !@!!@!@!  !@!  @!@  !@!       !@!       !@!  @!@       //
+    //        !!@@!!   @!@!@!@!  @!@ !!@!  @!@  !@!  @!!!:!    @!!!:!    @!@@!@!        //
+    //        !!@!!!   !!!@!!!!  !@!  !!!  !@!  !!!  !!!!!:    !!!!!:    !!@!!!         //
+    //            !:!  !!:  !!!  !!:  !!!  !!:  !!!  !!:       !!:       !!:            //
+    //            !:!  :!:  !:!  :!:  !:!  :!:  !:!  :!:       :!:       :!:            //
+    //       :::: ::   ::   :::  ::   ::   :::: ::   :: ::::   :: ::::   ::             //
+    //       :: : :    :    ::   ::   :    :: : :    : :: ::   : :: ::   :              //
+    //                                                                                  //
+    //       WDD Intrmediate JavaScript                                                 //
+    //       File: Advanced JS Assignment 2                                             //
+    //       Instructor: Brent Scott                                                    //
+    //                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////
+    -->
+  
+  <style>
+    /* CSS rule for body tag. */
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+    }
+    
+    /* CSS rule for div tag */
+    div{
+      margin-bottom: 15px;
+    }
+    
+    /* CSS rule for label tag */
+    label{
+      float: left;
+      width: 150px;
+    }
+    
+    /* CSS rule to get '*' before mandatory labels */
+    label.mandat::before{
+      content: '*';
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #c00;
+    }
+    
+  </style>
+  
+  <script>
+    
+    // Creating a function to validate E-Mail
+    function validateEmail(email_obj){
+      
+      // catching the value entered by user in the email field.
+      var email_address = email_obj.value;
+      
+      // Splitting email address at '@' symbol
+      var split_at = email_address.split('@');
+      
+      // First part will be user name for the address.
+      var name_part = split_at[0];
+      
+      if(split_at.length == 1){
+        alert("Your Email-ID must contain an '@' symbol.");
+        email_obj.select();
+        return false;
+      }
+      if(split_at.length > 2){
+        alert("Your Email-ID should not contain more than one '@' symbol.");
+        email_obj.select();
+        return false;
+      }
+      
+      // After checking @ symbol we will split next part of array at dot symbol.
+      var org_part = split_at[1];
+      var tld_split = org_part.split('.');
+      
+      if(tld_split.length == 1){
+        alert("Your Email-ID must contain a '.' symbol");
+        email_obj.select();
+        return false;
+      }
+      
+      // For some Email-ID there can be more than one dot so fetching string after last dot.
+      var tld_final = tld_split[tld_split.length-1];
+      var tld_prev = tld_split[tld_split.length-2];
+      
+      // Regular expressions for name, organisation and top level domain part of the email string.
+      var name_patt = /^[a-z\d\_\-\.]{2,}$/i;
+      var org_patt = /^[a-z\d\-\.]{2,}$/i;
+      var tld_patt = /^[a-z]{2,3}$/i;
+      
+      // Checking if name part is correctly entered by the user.
+      var name_result = name_part.match(name_patt);
+      if(name_result == null){
+        alert("Your Email must not contain any special symbols except @, _, -, . and name part must not be less than 2 characters.");
+        email_obj.select();
+        return false;
+      }
+      
+      // Checking if Org part is correctly entered by the user and we can only check for the length and some special symbols.
+      var org_result = tld_prev.match(org_patt);
+      if(org_result == null){
+        alert("Your Email part after @ symbol must not contain any special symbols except -, . and last second part must not be less than 2 characters.");
+        email_obj.select();
+        return false;
+      }
+      
+      // Checking if top level domain is correct.
+      var tld_result = tld_final.match(tld_patt);
+      if(tld_result == null){
+        alert("Your Email-ID must end with something like .com, .ca, .in, etc. It should be atleast 2 characters after the last '.' symbol.");
+        email_obj.select();
+        return false;
+      }
+      return true;
+    }
+    
+    // Creating a function to validate phone number.
+    function validatePhonenumber(phone_obj){
+      // Taking phone number's value in a variable for checking it against multiple conditions.
+      var phone_number = phone_obj.value;
+      
+      // Regular expression for phone number verification
+      var ph_patt = /^\(?\d{3}((\)\s)|(\-|\.))\d{3}(\-|\.)\d{4}$/;
+      
+      // Checking if phone number matches with the user's input.
+      var ph_regex = phone_number.match(ph_patt);
+      
+      if(ph_regex == null){
+        alert("Phone number's length must be 10 digits. It should be formated as '(xxx) xxx-xxxx' or 'xxx-xxx-xxxx' or 'xxx.xxx.xxxx' where 'x' must be a number.");
+        // Heighlight the field if else condition is true.
+        phone_obj.select();
+        return false;
+      }
+      return true;
+    }
+    
+    // Creating a function to add hyphen as the user types in the phone number.
+    /*function addHyphen(){
+      
+      // As the user releases the pressed key, value will be picked in the following variable.
+      var add_hyp = document.getElementById("tel_no").value;
+      
+      // Trying to remove '-' if user enters by mistake.
+      //add_hyp = add_hyp.value.split('-').join('');
+      
+      // Adding '-' when the user has typed three or seven characters.
+      if(add_hyp.length == 3 || add_hyp.length == 7){
+        // Concatenate '-' to the string.
+        add_hyp = add_hyp + '-';
+        // Sending the value back to the field.
+        document.getElementById("tel_no").value = add_hyp;
+      }
+    }*/
+    
+    // Creating a function to validate PO Code
+    function validatePOCode(po_obj){
+      var po_code = po_obj.value;
+      
+      // Regular expression for PO Code validation
+      var po_patt = /^[a-z]\d[a-z]\s\d[a-z]\d$/i;
+      
+      // Creating a result variable which will check for null return values.
+      var po_regex_res = po_code.match(po_patt);
+      
+      // If PO Code's length is more or less than six characters.
+      if(po_regex_res == null){
+        alert("PO Code must be 6 characters long. It should be formated as 'C0C 0C0' where 'C' must be a character and '0' must be a digit and a space after first 3 characters.");
+        // Heighlight the field if above condition is true.
+        po_obj.select();
+        return false;
+      }
+      // If pattern match is successful convert PO code to upper case before submission.
+      document.getElementById("po_code").value = po_code.toUpperCase();
+      return true;
+    }
+    
+    // Creating a functio to valudate URL
+    function validateURL(url_obj){
+      var url = url_obj.value;
+      var dot_split = url.split('.');
+      
+      // Regular expression for URL validation.
+      var url_patt = /^https?\:\/\//;
+      // Regular expression for checking URL domain and top level domain.
+      var domain_patt = /^[a-z0-9\-?]{2,}$/;
+      var tld_patt = /^[a-z]{2,3}$/;
+      
+      // Creating a result variable which will check for null return values.
+      var url_regex_res = url.match(url_patt);
+      
+      
+      // Making sure that url field is not mandatory and if user enter's something than it must be correct.
+      if(url != ''){
+        if(url_regex_res == null){
+          alert("Web address must contain 'http://' or 'https://' at the begining. Please correct and re-enter.");
+          url_obj.select();
+          return false;
+        }
+        if(dot_split.length < 3){
+          alert("Please enter a URL that looks like http://www.xyz.com.");
+          url_obj.select();
+          return false;
+        }
+        if(dot_split.length == 3){
+          // Checking second part where website name will appear
+          var domain_part = dot_split[dot_split.length-2];
+          // Checking last part where TLD will appear.
+          var tld_part = dot_split[dot_split.length-1];
+          
+          // Veryfying name of the website and TLD against regular expression
+          var domain_check = domain_part.match(domain_patt);
+          var tld_check = tld_part.match(tld_patt);
+          
+          // Checking if regular expression passes the test.
+          if(domain_check == null || tld_check == null){
+            alert("Website name should not contain any special symbols or digits and url should end with something like xx.ca, xx.com, xx.in, etc. where xx must be atleast 2 characters.");
+            url_obj.select();
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+    
+    // Creating a function to validate user's age.
+    function validateAge(age_obj){
+      var the_age = age_obj.value;
+      
+      // Regular expression for age validation.
+      var age_patt = /^\d{2,3}$/;
+      
+      // Creating a result variable which will check for null return values.
+      var age_regex_res = the_age.match(age_patt);
+      // If user enters value in age field.
+      if(the_age != ''){
+        
+        // Check if user has entered a number and not anything else.
+        if(age_regex_res == null){
+          alert("The age must be a number and it should be a 2 digit or 3 digit number. Please check and entr the correct age.");
+          age_obj.select();
+          return false;
+        }
+        
+        // Converting string to integer.
+        the_age = parseInt(the_age);
+        //alert(user_age.type);
+        //the_age = user_age;
+        
+        // If age is less than 15 or greater than 120.
+        if(the_age < 15 || the_age > 120){
+          alert("For the form to get submitted, your age must be between 15 to 120 years.");
+          // Heighlight the field if above condition is true.
+          age_obj.select();
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    // Checking basic form validation where fields are mandatory.
+    function formValidation(form_obj){
+      
+      // Creating an array to check if mandatory fields have some values.
+      var mandat_fields = new Array();
+      mandat_fields[0] = form_obj.elements["first_name"].value;
+      mandat_fields[1] = form_obj.elements["last_name"].value;
+      mandat_fields[2] = form_obj.elements["email_id"].value;
+      mandat_fields[3] = form_obj.elements["tel_no"].value;
+      mandat_fields[4] = form_obj.elements["po_code"].value;
+      
+      // If mandatory fields are blank than code will not proceed further.
+      for(i = 0; i < mandat_fields.length; i++){
+        if(mandat_fields[i] == ''){
+          alert("Fields marked with '*' are mandatory.");
+          return false;
+        }
+      }
+      
+      //First and Last name regex negation veriable
+      var nm_patt = /[^a-z+]/gi;
+      
+      // Trimming extra spaces from begining and end of the first name.
+      mandat_fields[0] = mandat_fields[0].trim();
+      // Variable for cross verifying first name with pattern
+      var fn_regex = mandat_fields[0].match(nm_patt);
+      
+      // Trimming extra spaces from begining and end of the last name.
+      mandat_fields[1] = mandat_fields[1].trim();
+      // Variable for cross verifying last name with pattern
+      var ln_regex = mandat_fields[1].match(nm_patt);
+      
+      // Following check only works if user enters only digits in the fields.
+      if(fn_regex != null || ln_regex != null){
+        alert("First name and Last name field should contain only upper case or lower case alphabets.");
+        return false;
+      }
+      
+      // Catching the value returned from validateEmail function.
+      var correct_email = validateEmail(document.getElementById('email_id'));
+      // If value is true proceed further.
+      if(correct_email){
+        // Catching the value returned from validatePhonenumber function.
+        var correct_phone = validatePhonenumber(document.getElementById('tel_no'));
+        // If value is true proceed further.
+        if(correct_phone){
+          // Catching the value returned from validatePOCode function.
+          var correct_po = validatePOCode(document.getElementById('po_code'));
+          // If value is true proceed further.
+          if(correct_po){
+            // Catching the value returned from validateURL function.
+            var correct_url = validateURL(document.getElementById('url_add'));
+            // If value is true proceed further.
+            if(correct_url){
+              // Catching the value returned from validateAge function.
+              var correct_age = validateAge(document.getElementById('age'));
+              // If value is true proceed further.
+              if(correct_age){
+                // Action element to be triggered on form submission.
+                form_obj.action = "http://scott-media.com/test/form_display.php";
+                form_obj.submit();
+              }
+            }
+          }
+        }
+      }
+    }
+    
+  </script>
+  
+</head>
+
+<body>
+  <!-- Page level heading 1 -->
+  <h1>Stay Connected</h1>
+  
+  <!-- Page form -->
+  <form method="post" id="js_form" name="js_form" novalidate>
+    
+    <!-- div tag for First Name field -->
+    <div>
+      <label class="mandat" for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" required />
+    </div>
+    
+    <!-- div tag for Last name field -->
+    <div>
+      <label class="mandat" for="last_name">Last Name:</label>
+      <input type="text" id="last_name" name="last_name" required />
+    </div>
+    
+    <!-- div tag for email ID -->
+    <div>
+      <label class="mandat" for="email_id">Email ID:</label>
+      <input type="email" id="email_id" name="email_id" required />
+    </div>
+    
+    <!-- div tag for phone number and invoking onkeyup event for adding '-' in the field -->
+    <div>
+      <label class="mandat" for="tel_no">Phone No.:</label>
+      <input type="tel" id="tel_no" name="tel_no" required /><!--onkeyup="addHyphen()"-->
+    </div>
+    
+    <!-- div tag for  Postal Code -->
+    <div>
+      <label class="mandat" for="po_code">Postal Code:</label>
+      <input type="text" id="po_code" name="po_code" required />
+    </div>
+    
+    <!-- div tag for Web Address -->
+    <div>
+      <label for="url_add">Web Address:</label>
+      <input type="url" id="url_add" name="url_add" required />
+    </div>
+    
+    <!-- div tag for age field -->
+    <div>
+      <label for="age">Age:</label>
+      <input type="text" id="age" name="age" required />
+    </div>
+    
+    <!-- div tags for button group and invoking first form function -->
+    <div id="btn_grp">
+      <input type="button" value="Submit Form" onclick="formValidation(this.form)" /> &nbsp; 
+      <input type="reset" value="Clear Form" />
+    </div>
+    
+  </form>
+  
+  <!-- This tag is only visible in case user disables the java script -->
+  <noscript>
+    <p>I humbly request you to turn on the Java Script or you won't be able to submit this form.</p>
+  </noscript>
+  
+</body>
+</html>

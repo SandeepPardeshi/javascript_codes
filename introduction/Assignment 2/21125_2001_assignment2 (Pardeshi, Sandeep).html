@@ -1,0 +1,77 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <title>JavaScript: Assignment 2</title>
+    <meta charset="utf-8"/>
+    
+    <!--
+    //////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                  //
+    //        @@@@@@    @@@@@@   @@@  @@@  @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@        //
+    //       @@@@@@@   @@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@       //
+    //       !@@       @@!  @@@  @@!@!@@@  @@!  @@@  @@!       @@!       @@!  @@@       //
+    //       !@!       !@!  @!@  !@!!@!@!  !@!  @!@  !@!       !@!       !@!  @!@       //
+    //        !!@@!!   @!@!@!@!  @!@ !!@!  @!@  !@!  @!!!:!    @!!!:!    @!@@!@!        //
+    //        !!@!!!   !!!@!!!!  !@!  !!!  !@!  !!!  !!!!!:    !!!!!:    !!@!!!         //
+    //            !:!  !!:  !!!  !!:  !!!  !!:  !!!  !!:       !!:       !!:            //
+    //            !:!  :!:  !:!  :!:  !:!  :!:  !:!  :!:       :!:       :!:            //
+    //       :::: ::   ::   :::  ::   ::   :::: ::   :: ::::   :: ::::   ::             //
+    //       :: : :    :    ::   ::   :    :: : :    : :: ::   : :: ::   :              //
+    //                                                                                  //
+    //       WDD Introduction to JavaScript                                             //
+    //       File: Assignment 2                                                         //
+    //       Instructor: Brent Scott                                                    //
+    //                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////
+    -->
+    
+    <style>
+      
+      /* CSS property for body tag */
+      body{
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 18px;
+      }
+      
+    </style>
+  </head>
+  
+  <body>
+    <script>
+      
+      // Prompt user to enter Email ID
+      var email_id = prompt("Please enter your email ID: ","");
+      
+      // Capture the position of @ symbol
+      var at_loc = email_id.indexOf("@");
+      
+      // Capture the position of . symbol
+      var period_loc = email_id.indexOf(".");
+      
+      // Verify that @ and . symbol is present in Email ID
+      while(at_loc == -1 || period_loc == -1){
+        alert("Email ID must contain \'@\' and \'.\' symbols.");
+        email_id = prompt("Please enter a valid Email ID: ","");
+        at_loc = email_id.indexOf("@");
+        period_loc = email_id.indexOf(".");
+      }
+      
+      // Capture the First part of Email ID
+      var user_name = email_id.substring(0,at_loc);
+      
+      // Display position of @ symbol
+      document.write("The \"@\" symbol is at position <strong>" + at_loc + "</strong>");
+      document.write("<br />");
+      // Display position of . symbol
+      document.write("The \".\" character is at position <strong>" + period_loc + "</strong>");
+      document.write("<br />");
+      // Display the capture first part of Email ID and complete Email ID as well
+      document.write("Thank you, " + user_name + ". Your email: " + email_id + " appears to be ok.");
+      document.write("<br />");
+      // Just some funny text
+      //document.write("Scared!!! &#128561; " + user_name + ", I was just kidding... &#128514; &#128541;");
+      
+    </script>
+  </body> 
+</html>

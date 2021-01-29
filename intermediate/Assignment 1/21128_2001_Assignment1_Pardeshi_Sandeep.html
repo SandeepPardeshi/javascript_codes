@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intermediate JS Assignment 1</title>
+  
+  <!--
+    //////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                  //
+    //        @@@@@@    @@@@@@   @@@  @@@  @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@        //
+    //       @@@@@@@   @@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@       //
+    //       !@@       @@!  @@@  @@!@!@@@  @@!  @@@  @@!       @@!       @@!  @@@       //
+    //       !@!       !@!  @!@  !@!!@!@!  !@!  @!@  !@!       !@!       !@!  @!@       //
+    //        !!@@!!   @!@!@!@!  @!@ !!@!  @!@  !@!  @!!!:!    @!!!:!    @!@@!@!        //
+    //        !!@!!!   !!!@!!!!  !@!  !!!  !@!  !!!  !!!!!:    !!!!!:    !!@!!!         //
+    //            !:!  !!:  !!!  !!:  !!!  !!:  !!!  !!:       !!:       !!:            //
+    //            !:!  :!:  !:!  :!:  !:!  :!:  !:!  :!:       :!:       :!:            //
+    //       :::: ::   ::   :::  ::   ::   :::: ::   :: ::::   :: ::::   ::             //
+    //       :: : :    :    ::   ::   :    :: : :    : :: ::   : :: ::   :              //
+    //                                                                                  //
+    //       WDD Intrmediate JavaScript                                                 //
+    //       File: Intermediate JavaScript Project Assignment 1                         //
+    //       Instructor: Brent Scott                                                    //
+    //                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////
+    -->
+  
+  <style>
+    /* CSS rule for body tag. */
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+    }
+    
+    /* CSS rule for div tag */
+    div{
+      margin-bottom: 15px;
+    }
+    
+    /* CSS rule for label tag */
+    label{
+      float: left;
+      width: 150px;
+    }
+    
+    /* CSS rule to get '*' before mandatory labels */
+    label.mandat::before{
+      content: '*';
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #c00;
+    }
+    
+  </style>
+  
+  <script>
+    
+    // Creating a function to validate E-Mail
+    function validateEmail(email_obj){
+      
+      // catching the value entered by user in the email field.
+      var email_address = email_obj.value;
+      // Fetching the index value of '@' symbol.
+      var at_pos = email_address.indexOf("@");
+      // Fetching the value of '.' character.
+      var dot_pos = email_address.indexOf(".");
+      
+      // Condition to verify if user has entered '@' and '.'
+      if(at_pos == -1 || dot_pos == -1){
+        alert("Your email address must contain '@' symbol and '.' character.");
+        // Heighlight the field if above condition is true.
+        email_obj.select();
+        return false;
+      }
+      
+      // @ and . should not appear on mentioned positions in function.
+      if(at_pos == 0 || at_pos == email_address.length-1 || at_pos == email_address.length-2 ||
+         dot_pos == 0 || dot_pos == email_address.length-1 || dot_pos == email_address.length-2){
+        alert("Your email address seems to be incorrect. Please correct and re-submit.");
+        // Heighlight the field if above condition is true.
+        email_obj.select();
+        return false;
+      }
+      
+      return true;
+    }
+    
+    // Creating a function to validate phone number.
+    function validatePhonenumber(phone_obj){
+      // Taking phone number's value in a variable for checking it against multiple conditions.
+      var phone_number = phone_obj.value;
+      
+      //var hyp_pos = phone_number.indexOf("-");
+      //var hyp_pos_2 = phone_number.lastIndexOf("-");
+      
+      // Function will proceed only if phone number's length is 12 characters.
+      if(phone_number.length == 12){
+        
+        // Using three variables to break the phone number in three different strings.
+        var no_sp_char1 = phone_number.substr(0,3);
+        var no_sp_char2 = phone_number.substr(4,3);
+        var no_sp_char3 = phone_number.substr(8,4);
+        
+        //if(hyp_pos != phone_number.length-9 || hyp_pos_2 != phone_number.length-5)
+        
+        // Checking if the value in the variables is not a number.
+        if(isNaN(no_sp_char1) || isNaN(no_sp_char2) || isNaN(no_sp_char3)){
+          alert("Please enter a correct phone number.");
+          // Heighlight the field if above condition is true.
+          phone_obj.select();
+          return false;
+        }
+        return true;
+      }
+      // If entered phone number exceeds the limit of 12 character.
+      else{
+        alert("Phone number's length must be 10 digits. It should be formated as 'xxx-xxx-xxxx' where 'x' must be a number.");
+        // Heighlight the field if else condition is true.
+        phone_obj.select();
+        return false;
+      }
+    }
+    
+    // Creating a function to add hyphen as the user types in the phone number.
+    function addHyphen(){
+      
+      // As the user releases the pressed key, value will be picked in the following variable.
+      var add_hyp = document.getElementById("tel_no").value;
+      
+      // Trying to remove '-' if user enters by mistake.
+      //add_hyp = add_hyp.value.split('-').join('');
+      
+      // Adding '-' when the user has typed three or seven characters.
+      if(add_hyp.length == 3 || add_hyp.length == 7){
+        // Concatenate '-' to the string.
+        add_hyp = add_hyp + '-';
+        // Sending the value back to the field.
+        document.getElementById("tel_no").value = add_hyp;
+      }
+    }
+    
+    // Creating a function to validate PO Code
+    function validatePOCode(po_obj){
+      var po_code = po_obj.value;
+      
+      // If PO Code's length is more or less than six characters.
+      if(po_code.length != 6){
+        alert("PO Code must be 6 characters long.");
+        // Heighlight the field if above condition is true.
+        po_obj.select();
+        return false;
+      }
+      return true;
+    }
+    
+    // Creating a functio to valudate URL
+    function validateURL(url_obj){
+      var url = url_obj.value;
+      
+      // Catching the index value of 'http://' in a variable.
+      var http = url.indexOf("http://");
+      
+      // If user enters a value in URL field.
+      if(url != ''){
+        if(http != 0){
+          alert("Web address must contain 'http://' at the begining. Please correct and re-enter.");
+          url_obj.select();
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    // Creating a function to validate user's age.
+    function validateAge(age_obj){
+      var the_age = age_obj.value;
+      
+      // If user enters value in age field.
+      if(the_age != ''){
+        
+        // Check if user has entered a number and not anything else.
+        if(isNaN(the_age)){
+          alert("The age must be a number. Please check and entr the correct age.");
+          age_obj.select();
+          return false;
+        }
+        
+        // Converting string to integer.
+        the_age = parseInt(the_age);
+        //alert(user_age.type);
+        //the_age = user_age;
+        
+        // If age is less than 15 or greater than 120.
+        if(the_age < 15 || the_age > 120){
+          alert("For the form to get submitted, your age must be between 15 to 120 years.");
+          // Heighlight the field if above condition is true.
+          age_obj.select();
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    // Checking basic form validation where fields are mandatory.
+    function formValidation(form_obj){
+      
+      // Creating an array to check if mandatory fields have some values.
+      var mandat_fields = new Array();
+      mandat_fields[0] = form_obj.elements["first_name"].value;
+      mandat_fields[1] = form_obj.elements["last_name"].value;
+      mandat_fields[2] = form_obj.elements["email_id"].value;
+      mandat_fields[3] = form_obj.elements["tel_no"].value;
+      mandat_fields[4] = form_obj.elements["po_code"].value;
+      
+      // If mandatory fields are blank than code will not proceed further.
+      for(i = 0; i < mandat_fields.length; i++){
+        if(mandat_fields[i] == ''){
+          alert("Fields marked with '*' are mandatory.");
+          return false;
+        }
+      }
+      
+      // Following check only works if user enters only digits in the fields.
+      if(!isNaN(mandat_fields[0]) || !isNaN(mandat_fields[1])){
+        alert("First name and Last name field should not contain only digits.");
+        return false;
+      }
+      
+      // Catching the value returned from validateEmail function.
+      var correct_email = validateEmail(document.getElementById('email_id'));
+      // If value is true proceed further.
+      if(correct_email){
+        // Catching the value returned from validatePhonenumber function.
+        var correct_phone = validatePhonenumber(document.getElementById('tel_no'));
+        // If value is true proceed further.
+        if(correct_phone){
+          // Catching the value returned from validatePOCode function.
+          var correct_po = validatePOCode(document.getElementById('po_code'));
+          // If value is true proceed further.
+          if(correct_po){
+            // Catching the value returned from validateURL function.
+            var correct_url = validateURL(document.getElementById('url_add'));
+            // If value is true proceed further.
+            if(correct_url){
+              // Catching the value returned from validateAge function.
+              var correct_age = validateAge(document.getElementById('age'));
+              // If value is true proceed further.
+              if(correct_age){
+                // Action element to be triggered on form submission.
+                form_obj.action = "http://scott-media.com/test/form_display.php";
+                form_obj.submit();
+              }
+            }
+          }
+        }
+      }
+    }
+    
+  </script>
+  
+</head>
+
+<body>
+  <!-- Page level heading 1 -->
+  <h1>Stay Connected</h1>
+  
+  <!-- Page form -->
+  <form method="post" id="js_form" name="js_form" novalidate>
+    
+    <!-- div tag for First Name field -->
+    <div>
+      <label class="mandat" for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" required />
+    </div>
+    
+    <!-- div tag for Last name field -->
+    <div>
+      <label class="mandat" for="last_name">Last Name:</label>
+      <input type="text" id="last_name" name="last_name" required />
+    </div>
+    
+    <!-- div tag for email ID -->
+    <div>
+      <label class="mandat" for="email_id">Email ID:</label>
+      <input type="email" id="email_id" name="email_id" required />
+    </div>
+    
+    <!-- div tag for phone number and invoking onkeyup event for adding '-' in the field -->
+    <div>
+      <label class="mandat" for="tel_no">Phone No.:</label>
+      <input type="tel" id="tel_no" name="tel_no" onkeyup="addHyphen()" required />
+    </div>
+    
+    <!-- div tag for  Postal Code -->
+    <div>
+      <label class="mandat" for="po_code">Postal Code:</label>
+      <input type="text" id="po_code" name="po_code" required />
+    </div>
+    
+    <!-- div tag for Web Address -->
+    <div>
+      <label for="url_add">Web Address:</label>
+      <input type="url" id="url_add" name="url_add" required />
+    </div>
+    
+    <!-- div tag for age field -->
+    <div>
+      <label for="age">Age:</label>
+      <input type="text" id="age" name="age" required />
+    </div>
+    
+    <!-- div tags for button group and invoking first form function -->
+    <div>
+      <input id="btn_grp" type="button" value="Submit Form" onclick="formValidation(this.form)" /> &nbsp; 
+      <input id="btn_grp" type="reset" value="Clear Form" />
+    </div>
+    
+  </form>
+  
+  <!-- This tag is only visible in case user disables the java script -->
+  <noscript>
+    <p>I humbly request you to turn on the Java Script or you won't be able to submit this form.</p>
+  </noscript>
+  
+</body>
+</html>

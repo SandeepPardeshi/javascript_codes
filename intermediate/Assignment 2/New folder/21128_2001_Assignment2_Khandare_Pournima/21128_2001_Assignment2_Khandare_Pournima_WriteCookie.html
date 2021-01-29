@@ -1,0 +1,432 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Intermediate JavaScript – Assignment 2 Write Cookie</title>
+    <meta charset="utf-8"/>
+    <!--
+      ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
+      ▄▀                                                  ▄▀
+      ▄▀          ▄▀▄ WEB DEVELOPMENT DIPLOMA ▄▀▄         ▄▀
+      ▄▀           ▀                           ▀          ▄▀
+      ▄▀          ▄▀▄ Intermediate Javascript ▄▀▄         ▄▀
+      ▄▀           ▀                           ▀          ▄▀
+      ▄▀              ▄▀▄  ASSIGNMENT - 2 ▄▀▄             ▄▀
+      ▄▀               ▀                   ▀              ▄▀
+      ▄▀              ▄▀▄  July 03, 2020 ▄▀▄              ▄▀
+      ▄▀               ▀                  ▀               ▄▀
+      ▄▀         ▄▀▄ POURNIMA KHANDARE-3123025 ▄▀▄        ▄▀
+      ▄▀          ▀                             ▀         ▄▀
+      ▄▀           ▄▀▄ INSTRUCTOR-BRENT SCOTT ▄▀▄         ▄▀
+      ▄▀            ▀                          ▀          ▄▀
+      ▄▀                                                  ▄▀
+      ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀                                   
+    -->
+    <style>
+       
+      body{
+        font-family: Arial,sans-serif;
+        font-size: 16px;
+      }
+     /*CSS Rules for wrapper */
+      #wrapper{
+        margin: 0 auto;
+        max-width: 960px;
+        padding: 5px 10px 30px 10px;
+        background-color: antiquewhite;
+        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+                    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+                    0 12.5px 10px rgba(0, 0, 0, 0.06),
+                    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+                    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+                    0 100px 80px rgba(0, 0, 0, 0.12); 
+      }
+      #validationmsg{
+        height: 15px;
+        color:#f00;
+        font-size: 1.2em;
+
+      }
+      h1{
+        text-align: center;  
+      }   
+      #wrapper div{
+        text-align: center;        
+      }
+      #js_Timer{
+        margin: 0 auto;
+      }     
+      #personal_details{
+        margin: 0 auto; 
+        width: 550px;
+        border: 1px solid #000;
+        margin-top: 20px;
+        padding: 0px 20px 20px 20px;
+      }
+      #personal_details label{
+        float:left;
+        width:180px;
+        font-size: 1.2em;
+      }
+      #personal_details label + #personal_details input{
+        clear:both;
+      } 
+      #personal_details input[type="text"],
+      #personal_details input[type="email"],      
+      #personal_details input[type="tel"],
+      #personal_details input[type="url"]
+      {
+        width:350px;
+        background-color: #ffe;
+        border: 2px solid #000;
+        padding: 6px;
+        font-size: 1.2em;
+        font-weight: 400;  
+        border: 2px solid #000;
+      }
+      /*button CSS rules   */
+      #personal_details .btn{        
+        border: none;
+        color: #000;
+        padding: 15px 32px;
+        text-align: center;        
+        display: inline-block;
+        font-size: 16px;
+        background-color: #FFC0CB;
+        
+      }
+      #submit_buttons{
+        text-align: center;
+      }
+      /* Js Timer div CSS Rules */
+      #js_Timer{
+        background: #000;
+        color:aqua;
+        height: 50px;
+        width: 550px;
+        padding-top: 10px;
+        font-size: 30px;
+        text-align: center;
+      }
+      
+    </style>
+    
+    <script>
+      
+      var IsValidForm=true;
+      var req_fields=new Array();
+      
+      var month_array = new Array();
+        month_array[0] = "January";   
+        month_array[1] = "February";
+        month_array[2] = "March";
+        month_array[3] = "April";
+        month_array[4] = "May";
+        month_array[5] = "June";
+        month_array[6] = "July";
+        month_array[7] = "August";
+        month_array[8] = "September";
+        month_array[9] = "October";
+        month_array[10] = "November";
+        month_array[11] = "December";
+      
+      // Array with the days of the week. 
+      var weekdays_array = new Array()
+        weekdays_array[0] = "Sunday";
+        weekdays_array[1] = "Monday";
+        weekdays_array[2] = "Tuesday";
+        weekdays_array[3] = "Wednesday";
+        weekdays_array[4] = "Thursday";
+        weekdays_array[5] = "Friday";
+        weekdays_array[6] = "Saturday";
+      
+      var formated_date = ''; 
+      
+      
+      // function to validate form
+      function validateForm_JS(personal_details){
+        IsRequired=true;
+        
+        req_fields[0]=personal_details.elements["name"].value;
+        req_fields[1]=personal_details.elements["email"].value;
+        req_fields[2]=personal_details.elements["telephone"].value;
+        req_fields[3]=personal_details.elements["postalCode"].value;        
+        
+        //check required field value is empty or not
+        for(var i=0;i< req_fields.length;i++){
+          if(req_fields[i]=='') {
+            IsRequired=false;            
+            break;            
+          }          
+        } // anything is black
+        if(!IsRequired){
+          displayMessage("Please fill all required (*) fields");
+          return;
+        }
+        else
+          IsValidForm=true;
+        
+        // call function to verify email
+        if(IsValidForm)
+          checkemail();        
+       
+        //call function to verify phone number
+        if(IsValidForm)
+           checkPhoneNumber();
+        
+        //call function to verify postal code
+        if(IsValidForm)
+          checkpostalcode();
+        
+        //call function to verify url
+        if(IsValidForm)
+          checkurl();
+        
+        //call function to verify age
+        if(IsValidForm)
+          checkage(); 
+        
+        //call function to save cookies 
+        if(IsValidForm)
+          saveCookie();    
+      }
+      
+      //function to validate email
+      function checkemail(){        
+        var email_add=personal_details.elements["email"].value;
+        IsValidForm=true;        
+        
+        var at_symbol_pos = email_add.indexOf("@");
+        var dot_char_pos = email_add.indexOf(".");
+        
+        // check email address,it should contain @ and . symbol
+        if(at_symbol_pos==-1 || dot_char_pos==-1)
+          displayMessage('Entered email address does not contain "@"  symbol and "." character')
+          
+        //check @ and . position it should not be at first and last character
+        if(at_symbol_pos==0 || at_symbol_pos==email_add.length-1 || at_symbol_pos==email_add.length-2
+           || dot_char_pos==0 || dot_char_pos==email_add.length-1 || dot_char_pos==email_add.length-2){
+          displayMessage('Please enter valid email address');
+        }        
+      }
+      
+      //function to verify phone number
+      function checkPhoneNumber(){
+        IsValidForm=true;
+        var telephone=personal_details.elements["telephone"].value;
+        var first_hyphen=telephone.indexOf('-');
+        var second_hyphen=telephone.lastIndexOf('-')
+        
+        //validate phone number format in xxx-xxx-xxxx
+        if(telephone.length!=12 || first_hyphen!=3 || second_hyphen !=7)
+          displayMessage('Entered telephone number should be 12 character and xxx-xxx-xxxx format')         
+        } 
+      
+      
+      // function to validate postal code
+      function checkpostalcode(){
+        IsValidForm=true;
+        var postalcode=personal_details.elements["postalCode"].value;
+        
+        if(postalcode.trim()=='')
+          return;
+        
+        //check index of space
+        var space_pos=postalcode.trim().indexOf(' ');  
+        
+        //check length of postal code and there should not be space
+        if(space_pos!=-1 || postalcode.trim().length!=6)
+          displayMessage("Please enter valid postal code. It should be 6 characters with no space");        
+      }
+      
+      //function to validate url.
+      function checkurl(){
+        IsValidForm=true;
+        var url=personal_details.elements["url"].value;
+        if(url.trim()=='')
+          return;       
+        
+        var http_position=url.indexOf("http://");  
+        //url should start with http://
+        if(http_position!=0)
+          displayMessage('Please enter valid url, It should begin with "http://"');
+      }
+      
+      
+      
+      //function to validate age
+      function checkage(){
+        IsValidForm=true;
+        var age=personal_details.elements["age"].value;
+        
+        if(age.trim()=='')
+          return;
+        
+        if(isNaN(age)) 
+          displayMessage("Please enter Number for age");
+        
+        if((parseInt(age) < 1 || parseInt(age)>120)){
+           displayMessage("Oh Please enter proper age");;
+        }          
+      }
+      
+      //function to display validation message
+      function displayMessage(msg){        
+        document.getElementById("validationmsg").innerHTML= "Hello " +  req_fields[0] + " ! " + msg;
+        IsValidForm=false;
+        return;
+      } 
+      
+      //function to reset message
+      function clearmessage(){
+        document.getElementById("validationmsg").innerHTML= "Hello " + req_fields[0] + " ! " + msg;
+      }
+      
+      //function to save cookie in browser
+      function saveCookie(){
+        var name= document.getElementById("name").value;
+        var email= document.getElementById("email").value;
+        var telephone= document.getElementById("telephone").value;
+        var postalCode= document.getElementById("postalCode").value;
+        
+        // get current date
+        var exp_date=new Date();
+        
+        //get current year and two years in date to make cookies persistent
+        exp_date.setFullYear(exp_date.getFullYear()+2);        
+        
+        var cookie_content="name::" + name + "--email::" + email + "--telephone::" + telephone + "--postalcode::" + postalCode;
+        cookie_content = encodeURIComponent(cookie_content);        
+       
+        document.cookie = "Personal_Details=" + cookie_content + ";expires=" + exp_date.toUTCString();    
+        
+        displayMessage(" Cookies saved successfully for all mandatory fields.");
+      }
+      
+      //function to display time on page load
+      function setTimer(){
+        var current_date =new Date();
+        var da_year = current_date.getFullYear();
+        var da_month = current_date.getMonth();
+        
+        var month_name = month_array[da_month];
+        
+        var da_weekday = current_date.getDay();
+        
+        var weekday_name = weekdays_array[da_weekday];
+        
+        var da_month_date = current_date.getDate();
+        
+        //date with month year day weekday
+        formated_date = weekday_name + ", " + month_name + " " + da_month_date + ", " + da_year;
+        
+        //get hours , minutes
+        var current_hours = current_date.getHours();
+        var current_minutes = current_date.getMinutes();
+        var current_seconds = current_date.getSeconds();        
+        var current_time = current_date.getTime(); 
+        var am_pm;
+        
+        if(current_hours > 12){
+          am_pm = "PM";
+        }
+        else{
+          am_pm = "AM";
+        }
+        if(current_hours > 12){
+          current_hours -= 12;
+        }
+        // At midnight, the hours will be "0". Detect this, and convert to 12. 
+        if(current_hours == 0){
+          current_hours = 12;
+        }
+        if(current_minutes < 10){
+          current_minutes = "0" + current_minutes;
+        }
+        if(current_seconds < 10){
+          current_seconds = "0" + current_seconds;
+        }
+         // display time woth minutes and seconds
+        var formated_time = current_hours + ":" + current_minutes + ":" + current_seconds +" " + am_pm;
+        var js_Timer = document.getElementById("js_Timer");
+        
+        //display timer with date and time
+        js_Timer.innerHTML = formated_date + "  " + formated_time;  
+        
+      }
+      // onload event to display timer on page load
+       onload = function(){
+        setTimer();
+        my_interval = setInterval("setTimer()",1); // call function to display current time
+      }
+      
+      
+    </script>
+  </head>
+  
+  <body>
+    <div id="wrapper">
+      <h1>Save Cookies using JavaScript</h1>    
+      <div id="js_Timer"></div>
+      <div id="validationmsg">Hello User!   
+      </div>
+     <!--form start -->
+      <form
+            method="post"
+            id="personal_details"
+            name="personal_details"
+            autocomplete="on"
+            novalidate    
+      >   
+        <p>
+          <label for="name" class="required">Name</label>
+          <input type="text" name="name" id="name" required/>
+        </p>
+
+        <p>
+          <label for="email" class="required">Email address</label>
+          <input type="email" name="email" id="email" required/>
+        </p>
+
+        <p>
+          <label for="telephone" class="required">Telephone number</label>
+          <input type="tel" name="telephone" id="telephone" required/>
+        </p>
+
+        <p>  
+          <label for="postalCode" class="required">Postal Code</label>
+          <input type="text" name="postalCode" id="postalCode" required/>
+        </p>
+
+        <p>
+          <label for="url">URL</label>
+          <input type="url" name="url" id="url" required/>
+        </p>
+
+        <p>
+          <label for="age">Age</label>
+          <input type="text" name="age" id="age" required/>
+        </p> 
+        <!--buttons -->
+        <p id="submit_buttons">
+          <input type="button" class="btn" value="Save Cookie"   onclick="validateForm_JS(this.form);"/>
+          <input type="reset" class="btn" onclick="clearmessage()" value="Reset"  />
+          <input type="button" class="btn"  onclick="window.location.href='21128_2001_Assignment2_Khandare_Pournima_ReadCookie.html'" value="Read Cookie"  />
+        </p>        
+
+      </form>
+      <!-- display message if user has turned of javascript  -->
+      <noscript>
+        <p>Sorry, this form requires JavaScript to be turned on. Please enable JavaScript
+           to send this form      
+        </p>
+      </noscript>   
+    </div>
+  </body>
+    
+</html>
+
+
+
+
+
+

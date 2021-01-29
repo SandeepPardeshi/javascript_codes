@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Intermediate JavaScript – Assignment 2 Read Cookie</title>
+    <meta charset="utf-8"/>
+     <!--
+    ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀
+    ▄▀                                                  ▄▀
+    ▄▀          ▄▀▄ WEB DEVELOPMENT DIPLOMA ▄▀▄         ▄▀
+    ▄▀           ▀                           ▀          ▄▀
+    ▄▀          ▄▀▄ Intermediate Javascript ▄▀▄         ▄▀
+    ▄▀           ▀                           ▀          ▄▀
+    ▄▀              ▄▀▄  ASSIGNMENT - 2 ▄▀▄             ▄▀
+    ▄▀               ▀                   ▀              ▄▀
+    ▄▀              ▄▀▄  July 03, 2020 ▄▀▄              ▄▀
+    ▄▀               ▀                  ▀               ▄▀
+    ▄▀         ▄▀▄ POURNIMA KHANDARE-3123025 ▄▀▄        ▄▀
+    ▄▀          ▀                             ▀         ▄▀
+    ▄▀           ▄▀▄ INSTRUCTOR-BRENT SCOTT ▄▀▄         ▄▀
+    ▄▀            ▀                          ▀          ▄▀
+    ▄▀                                                  ▄▀
+    ▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀                                   
+    -->
+    <style>
+      /*CSS properties start */
+      body{
+        font-family: Arial,sans-serif;
+        font-size: 16px;
+      }
+     /*wrapper rules */
+      #wrapper{
+        margin: 0 auto;
+        max-width: 960px;
+        padding: 5px 10px 30px 10px;
+        background-color: antiquewhite;
+        box-shadow: 0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+                    0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+                    0 12.5px 10px rgba(0, 0, 0, 0.06),
+                    0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+                    0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+                    0 100px 80px rgba(0, 0, 0, 0.12); 
+      }
+      /*  message box    */
+      #message{
+        height: 15px;
+        color:#f00;
+        font-size: 1.2em;
+/*        text-align: left;*/
+      }
+      h1{
+        text-align: center;  
+      }   
+      #wrapper div{
+        text-align: center;        
+      }
+      #js_Timer{
+        margin: 0 auto;
+      }     
+      #personal_details{
+        margin: 0 auto; 
+        width: 550px;
+        border: 1px solid #000;
+        margin-top: 20px;
+        padding: 0px 20px 20px 20px;
+      }
+      #personal_details label{
+        float:left;
+        width:180px;
+        font-size: 1.2em;
+      }
+      #personal_details label + #personal_details input{
+        clear:both;
+      } 
+      #personal_details input[type="text"],
+      #personal_details input[type="email"],      
+      #personal_details input[type="tel"],
+      #personal_details input[type="url"]
+      {
+        width:350px;
+        background-color: #ffe;
+        border: 2px solid #000;
+        padding: 6px;
+        font-size: 1.2em;
+        font-weight: 400;  
+        border: 2px solid #000;
+      }
+      
+      #personal_details .btn{        
+        border: none;
+        color: #000;
+        padding: 15px 32px;
+        text-align: center;        
+        display: inline-block;
+        font-size: 16px;
+        background-color: #FFC0CB;
+        
+      }
+      
+      #js_Timer{
+        background: #000;
+        color:aqua;
+        height: 50px;
+        width: 550px;
+        padding-top: 10px;
+        font-size: 30px;
+        text-align: center;
+      }
+    </style>
+       
+    <script>
+      // define array of the months
+      var month_array = new Array();
+        month_array[0] = "January";   
+        month_array[1] = "February";
+        month_array[2] = "March";
+        month_array[3] = "April";
+        month_array[4] = "May";
+        month_array[5] = "June";
+        month_array[6] = "July";
+        month_array[7] = "August";
+        month_array[8] = "September";
+        month_array[9] = "October";
+        month_array[10] = "November";
+        month_array[11] = "December";
+      
+      // Array with the days of the week. 
+      var weekdays_array = new Array()
+        weekdays_array[0] = "Sunday";
+        weekdays_array[1] = "Monday";
+        weekdays_array[2] = "Tuesday";
+        weekdays_array[3] = "Wednesday";
+        weekdays_array[4] = "Thursday";
+        weekdays_array[5] = "Friday";
+        weekdays_array[6] = "Saturday";
+      
+      var formated_date = ''; //variable to display date      
+      
+     // function to read cookie
+      function readCookiePersonalDetails(personaldetails){
+        
+        //check if cookie has some value
+        if(document.cookie!=''){
+          //get cookies from document cookie
+          var cookie_personaldetails=document.cookie;
+          
+          //split all browser cookies and get in cookie_details
+          var cookie_details=cookie_personaldetails.split(";");
+          var cookiepresent = '';
+          
+          //check my cookiename is aavilable or not in all cookies
+          for(i=0; i< cookie_details.length;i++){
+            if(cookie_details[i].indexOf(personaldetails)!=-1){
+               cookiepresent=cookie_details[i];
+               break;
+            }
+          }
+          
+          //if cookie not present display message
+          if(cookiepresent==''){
+            displaymessage("Sorry, there is no cookie");
+            return;
+          }
+          
+          //get content of my cookie
+          var cookie_content= cookiepresent.split("=");
+           
+          var all_cookies=cookie_content[1];
+          
+          //decode cookies to read in original form
+          all_cookies=decodeURIComponent(all_cookies);       
+          
+          //split all cookie pairs
+          var cookies_pairs=all_cookies.split("--");
+          
+          //define new array for cookies
+          var cookie_name_value= new Array();
+          
+          for(i=0;i<cookies_pairs.length;i++){
+             var cookie_split = cookies_pairs[i].split("::")
+             cookie_name_value[cookie_split[0]]= cookie_split[1];     
+          }
+          
+          //display cookies in the form
+          DisplayResult(cookie_name_value);
+        }
+        else{ // display message if cookies are not present
+          displayMessage("There is No Cookie in browser")
+        }          
+      }
+      
+      //function to display result in a form 
+      function DisplayResult(cookie_name_value){
+        //get the form
+        var personal_details=document.getElementById("personal_details");
+        // assign values to form elements
+        personal_details.elements["name"].value=cookie_name_value["name"];
+        personal_details.elements["email"].value=cookie_name_value["email"];
+        personal_details.elements["telephone"].value=cookie_name_value["telephone"];
+        personal_details.elements["postalCode"].value=cookie_name_value["postalcode"];      
+      }
+      
+      //delete cookie from browser 
+      function vanishCookie(personaldetails){ 
+        if(document.cookie!=''){
+        var personal_details=document.getElementById("personal_details");
+        
+        var exp_date=new Date();
+        exp_date.setDate(exp_date.getDate()-1); //previous date    
+        
+        //set expire date as previous cookie to delete cookie
+        document.cookie=personaldetails + "=;expires=" + exp_date.toUTCString();
+       //clear values from form elements 
+        personal_details.elements["name"].value="";
+        personal_details.elements["email"].value="";
+        personal_details.elements["telephone"].value="";
+        personal_details.elements["postalCode"].value="";  
+        
+        displayMessage("Cookies deleted successfully");
+        }
+      }
+      
+      //function to display validation message
+      function displayMessage(msg){        
+        document.getElementById("message").innerHTML= "Hello User! " + msg;        
+        return;
+      } 
+      
+      //set timer function to display on page load
+      function setTimer(){
+        var current_date =new Date();
+        var da_year = current_date.getFullYear();
+        var da_month = current_date.getMonth();
+        //get months name from array
+        var month_name = month_array[da_month];
+        
+        var da_weekday = current_date.getDay();
+        // get weekday from array
+        var weekday_name = weekdays_array[da_weekday];
+        
+        var da_month_date = current_date.getDate();
+        
+        //formatted date with weekdays ,day and year
+        formated_date = weekday_name + ", " + month_name + " " + da_month_date + ", " + da_year;
+        
+        //get hours, minutes, seconds
+        var current_hours = current_date.getHours();
+        var current_minutes = current_date.getMinutes();
+        var current_seconds = current_date.getSeconds();        
+        var current_time = current_date.getTime(); 
+        var am_pm;
+        
+        //condition to define AM and PM
+        if(current_hours > 12){
+          am_pm = "PM";
+        }
+        else{
+          am_pm = "AM";
+        }
+        if(current_hours > 12){
+          current_hours -= 12;
+        }
+        // At midnight, the hours will be "0". Detect this, and convert to 12. 
+        if(current_hours == 0){
+          current_hours = 12;
+        }
+        if(current_minutes < 10){
+          current_minutes = "0" + current_minutes;
+        }
+        if(current_seconds < 10){
+          current_seconds = "0" + current_seconds;
+        }
+        //formatted date with hours minutes seconds         
+        var formated_time = current_hours + ":" + current_minutes + ":" + current_seconds +" " + am_pm;
+        var js_Timer = document.getElementById("js_Timer");
+        //display timer with date and time
+        js_Timer.innerHTML = formated_date + "  " + formated_time;        
+      }
+      
+      //onload function to display timer on page
+       onload = function(){
+        setTimer(); // call function to set time
+        my_interval = setInterval("setTimer()",1);
+      }
+      
+    </script>    
+  </head>
+  <body>
+    <div id="wrapper">
+      <h1>Read Cookies using JavaScript </h1>
+      <div id="js_Timer"></div>
+      <div id="message">Hello User!</div>
+
+      <form
+            method="post"
+            id="personal_details"
+            name="personal_details"             
+      >
+        <p id="read_button">
+        <input type="button" class="btn" value="Read Cookie" onclick="readCookiePersonalDetails('Personal_Details');"/>
+        <input type="button" class="btn" value="Delete Cookie" onclick="vanishCookie('Personal_Details');"/>
+        </p>    
+        <p>
+          <label for="name" class="required">Name</label>
+          <input readonly type="text" name="name" id="name" required/>
+        </p>
+
+        <p>
+          <label for="email" class="required">Email address</label>
+          <input readonly type="email" name="email" id="email" required/>
+        </p>
+
+        <p>
+          <label for="telephone" class="required">Telephone number</label>
+          <input readonly type="tel" name="telephone" id="telephone" required/>
+        </p>
+
+        <p>  
+          <label for="postalCode" class="required">Postal Code</label>
+          <input readonly type="text" name="postalCode" id="postalCode" required/>
+        </p>
+
+        <p>
+          <label for="url">URL</label>
+          <input readonly type="url" name="url" id="url" required/>
+        </p>
+
+        <p>
+          <label for="age">Age</label>
+          <input readonly type="text" name="age" id="age" required/>
+        </p> 
+      </form>
+      <noscript>
+        This page requires JavaScript. Please enable it in your browser. 
+      </noscript>
+    </div>
+  </body>
+
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Intermediate JS Assignment 1</title>
+  
+  <style>
+    
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 18px;
+    }
+    
+    div{
+      margin-bottom: 15px;
+    }
+    
+    label{
+      float: left;
+      width: 150px;
+    }
+    
+    label.mandat::before{
+      content: '*';
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #c00;
+    }
+    
+  </style>
+  
+  <script>
+    
+    function validateEmail(email_obj){
+      
+      var email_address = email_obj.value;
+      
+      var at_pos = email_address.indexOf("@");
+      
+      var dot_pos = email_address.indexOf(".");
+      
+      if(at_pos == -1 || dot_pos == -1){
+        alert("Your email address must contain an '@' symbol and a '.' character.")
+        email_obj.select();
+        return false;
+      }
+      
+      if(at_pos == 0 || at_pos == email_address.length-1 || at_pos == email_address.length-2 ||
+         dot_pos == 0 || dot_pos == email_address.length-1 || dot_pos == email_address.length-2){
+        alert("Your email address seems to be incorrect. Please correct and re-submit.");
+        email_obj.select();
+        return false;
+      }
+      
+      return true;
+    }
+    
+    function validatePhonenumber(phone_obj){
+      
+      var phone_number = phone_obj.value;
+      
+      var hyp_pos = phone_number.indexOf("-");
+      var hyp_pos_2 = phone_number.lastIndexOf("-");
+      
+      if(phone_number.length == 12){
+        if(hyp_pos != phone_number.length-9 || hyp_pos_2 != phone_number.length-5){
+          alert("Please enter a correct phone number.");
+          phone_obj.select();
+          return false;
+        }
+        return true;
+      }
+      else{
+        alert("Phone number's length must be 12 characters. It should be formated as 'xxx-xxx-xxxx' where 'x' must be a number.");
+        phone_obj.select();
+        return false;
+      }
+    }
+    
+    function validatePOCode(po_obj){
+      var po_code = po_obj.value;
+      
+      if(po_code.length != 6){
+        alert("PO Code must be 6 characters long.");
+        po_obj.select();
+        return false;
+      }
+      return true;
+    }
+    
+    function validateURL(url_obj){
+      var url = url_obj.value;
+      
+      var http = url.indexOf("http://");
+      
+      if(url != ''){
+        if(http != 0){
+          alert("Web address must contain 'http://' at the begining. Please correct and re-enter.");
+          url_obj.select();
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    function validateAge(age_obj){
+      var the_age = age_obj.value;
+      
+      if(the_age != ''){
+        
+        alert(the_age.type);
+        var user_age = parseInt(the_age);
+        alert(user_age.type);
+        the_age = user_age;
+        
+        if(user_age < 15 || user_age > 120){
+          alert("For the form to get submitted, your age must be between 15 to 120 years.");
+          // Setting the field value to blank.
+          age_obj.select();
+          return false;
+        }
+        
+        if(isNaN(user_age)){
+          alert("The age must be a number. Please check and entr the correct age");
+          age_obj.select();
+          return false;
+        }
+      }
+      return true;
+    }
+    
+    function formValidation(form_obj){
+      
+      var mandat_fields = new Array();
+      mandat_fields[0] = form_obj.elements["first_name"].value;
+      mandat_fields[1] = form_obj.elements["last_name"].value;
+      mandat_fields[2] = form_obj.elements["email_id"].value;
+      mandat_fields[3] = form_obj.elements["tel_no"].value;
+      mandat_fields[4] = form_obj.elements["po_code"].value;
+      
+      for(i = 0; i < mandat_fields.length; i++){
+        if(mandat_fields[i] == ''){
+          alert("Fields with an * should not be blank.");
+          return false;
+        }
+      }
+      
+      var correct_email = validateEmail(document.getElementById('email_id'));
+      
+      if(correct_email){
+        var correct_phone = validatePhonenumber(document.getElementById('tel_no'));
+        
+        if(correct_phone){
+          var correct_po = validatePOCode(document.getElementById('po_code'));
+          
+          if(correct_po){
+            var correct_url = validateURL(document.getElementById('url_add'));
+            
+            if(correct_url){
+              var correct_age = validateAge(document.getElementById('age'));
+              
+              if(correct_age){
+                form_obj.action = "http://scott-media.com/test/form_display.php";
+                form_obj.submit();
+              }
+            }
+          }
+        }
+      }
+    }
+    
+  </script>
+  
+</head>
+
+<body>
+  
+  <h1>Stay Connected</h1>
+  
+  <form action="" method="post" id="js_form" name="js_form" novalidate>
+    
+    <div>
+      <label class="mandat" for="first_name">First Name:</label>
+      <input type="text" id="first_name" name="first_name" required />
+    </div>
+    
+    <div>
+      <label class="mandat" for="last_name">Last Name:</label>
+      <input type="text" id="last_name" name="last_name" required />
+    </div>
+    
+    <div>
+      <label class="mandat" for="email_id">Email ID:</label>
+      <input type="email" id="email_id" name="email_id" required />
+    </div>
+    
+    <div>
+      <label class="mandat" for="tel_no">Phone No.:</label>
+      <input type="tel" id="tel_no" name="tel_no" required />
+    </div>
+    
+    <div>
+      <label class="mandat" for="po_code">Postal Code:</label>
+      <input type="text" id="po_code" name="po_code" required />
+    </div>
+    
+    <div>
+      <label for="url_add">Web Address:</label>
+      <input type="url" id="url_add" name="url_add" required />
+    </div>
+    
+    <div>
+      <label for="age">Age:</label>
+      <input type="text" id="age" name="age" required />
+    </div>
+    
+    <div>
+      <input id="btn_grp" type="button" value="Submit Form" onclick="formValidation(this.form)" />
+      <input id="btn_grp" type="reset" value="Clear Form" />
+    </div>
+    
+  </form>
+  
+  <noscript>
+    <p>I humbly request you to turn on the Java Script or you won't be able to submit this form.</p>
+  </noscript>
+  
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Assignment 3</title>
+    
+    <style>
+      
+      /* CSS rule for page body */
+      body{
+        font-family: Arial, Tahoma, sans-serif;
+        font-size: 18px;
+        margin: 0;
+        position: relative;
+        background-color: #DEB887;
+      }
+      
+      /* CSS rule for page wrapper */
+      #wrapper{
+        margin: 0 auto;
+        width: 960px;
+      }
+      
+      /* CSS rule for page header */
+      header{
+        width: 960px;
+        height: 80px;
+        background: linear-gradient(#eee,#ccc);
+      }
+      
+      /* CSS rule for page heading */
+      header h1{
+        margin: 0;
+        padding-top: 20px;
+        padding-left: 10px;
+      }
+      
+      /* CSS rule for navigation button */
+      #enable_nav{
+        width: 960px;
+        height: 45px;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: rgba(10,135,141,1);
+      }
+      
+      /* CSS rule for main button group div */
+      div#wrapper div#btn_grp{
+        position: absolute;
+        border: 1px solid #000;
+        background-color: #cff;
+        width: 960px;
+        height: 65px;
+        text-align: center;
+        box-sizing: border-box;
+        float: left;
+        margin-left: -850px;
+        opacity: 0;
+      }
+      
+      /* CSS rule for closing button on navigation */
+      .x_modal{
+        display: block;
+        border-radius: 50%;
+        font-size: 1.1em;
+        background: radial-gradient(#333,#ccc);
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        padding: 2px 7px 2px 7px;
+        border: 2px solid #000;
+        text-decoration: none;
+        color: #fff;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+      }
+      
+      /* CSS rule for navigation buttons */
+      #btn_grp button{
+        width: 198px;
+        height: 45px;
+        margin: 8px 7px 5px 7px;
+        color: rgba(10,135,141,1);
+        font-weight: bold;
+        font-size: 1.1em;
+        border-radius: 15px 0 15px 0;
+      }
+      
+      /* CSS rule for paragraph box visibility */
+      div.para_visible{
+        position: absolute;
+        top: 191px;
+        border: 1px solid #000;
+        background-color: #ccc;
+        width: 960px;
+        box-sizing: border-box;
+        padding: 10px;
+        min-height: 350px;
+        box-sizing: border-box;
+        opacity: 1;
+      }
+      
+      /* CSS rule for hiding paragraph box */
+      div.para_hidden{
+        opacity: 0;
+      }
+      
+    </style>
+    
+  </head>
+  
+  <body>
+    <div id="wrapper"><!-- Div container start -->
+      <header>
+        <h1>What A Nav!</h1>
+      </header>
+      <!-- Main navigation button -->
+      <button id="enable_nav">View Navigation</button>
+      <!-- Navigation Button group -->
+      <div id="btn_grp">
+        <button id="open_para">Display Text</button>
+        <button id="small_text">Small Text</button>
+        <button id="large_text">Large Text</button>
+        <button id="default_text">Medium Text</button>
+        <a href="javascript:;" class="x_modal">X</a>
+      </div>
+      <!-- Paragraph box -->
+      <div class="para_hidden para_visible">
+        <h2>Zoom In &amp; Out The Text Size</h2>
+        <p>ASUS has confirmed that it will be launching the ROG Phone 3 this month, the successor to last year's ROG Phone 2. The device, which is thought to include a 6,000 mAh battery, has already been seen in a leaked hands-on video and at the TENAA. The ROG Phone 3 should have a high-refresh-rate AMOLED panel and perhaps even a Snapdragon 865 Plus chipset.</p>
+        <p>The "Grand Launch Event", as ASUS is calling it, will commence on July 22 at 15:00 UTC. While the company is yet to announce in which countries it will sell the ROG Phone 3, it has emphasised the launch times for Taipei, Milan and New York. Hence, it should be expected that the ROG Phone 3 will not only be released in Taiwan, Italy and the US, but also the rest of the EU and North America.</p>
+      </div>
+    </div><!-- Div container end -->
+    
+    <noscript>
+      Please enable JavaScript for this page to work properly.
+    </noscript>
+    
+    <!-- jQuery Content delivery network -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <script>
+      // Waits until page and jQuery is loaded
+      $(document).ready(function(){
+        // Click on this button will enable the animation for mentioned ID.
+        $("#enable_nav").click(function(){
+          $("#btn_grp").animate({
+            opacity: "1",
+            marginLeft: '0',
+            //pointerEvents: 'initial'
+          });
+        });
+        
+        // Toggle class on click of a button
+        $("#open_para").click(function(){
+          $(".para_visible").toggleClass("para_hidden");
+        });
+        
+        // Animating the close button so that navigation can be hidden on the user's request
+        $(".x_modal").click(function(){
+          $('#btn_grp').animate({
+            position: "absolute",
+            border: "1px solid #000",
+            backgroundColor: "#cff",
+            width: "960px",
+            height: "65px",
+            textAlign: "center",
+            boxSizing: "border-box",
+            float: "left",
+            marginLeft: "-850px",
+            opacity: 0
+          });
+        });
+        
+        // Changing text to smaller size than the default
+        $("#small_text").click(function(){
+          // Getting the number p tags on the page
+          var ptag = document.getElementsByTagName('p');
+          // Getting CSS property for p tag
+          var default_size = window.getComputedStyle(ptag[0]).getPropertyValue('font-size');
+          default_size = parseInt(default_size);
+          
+          // Reducing the font-size by 12px if button is clicked.
+          for(i = 0; i < ptag.length; i++){
+            ptag[i].style.fontSize = "12px";
+          }
+        });
+        
+        // Changing text to larger size than the default
+        $("#large_text").click(function(){
+          // Getting CSS property for p tag
+          var ptag = document.getElementsByTagName('p');
+          // Getting CSS property for p tag
+          var default_size = window.getComputedStyle(ptag[0]).getPropertyValue('font-size');
+          default_size = parseInt(default_size);
+          
+          // Increasing the font-size by 20px if button is clicked.
+          for(i = 0; i < ptag.length; i++){
+            ptag[i].style.fontSize = "20px";
+          }
+        });
+        
+        // Changing text to 16px size
+        $("#default_text").click(function(){
+          // Getting CSS property for p tag
+          var ptag = document.getElementsByTagName('p');
+          // Getting CSS property for p tag
+          var default_size = window.getComputedStyle(ptag[0]).getPropertyValue('font-size');
+          default_size = parseInt(default_size);
+          
+          // Setting the font-size back to default.
+          for(i = 0; i < ptag.length; i++){
+            ptag[i].style.fontSize = "16px";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

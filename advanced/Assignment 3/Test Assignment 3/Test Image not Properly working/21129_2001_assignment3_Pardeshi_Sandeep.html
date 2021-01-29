@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Advanced JS Assignment 3</title>
+    
+    <!--
+    //////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                  //
+    //        @@@@@@    @@@@@@   @@@  @@@  @@@@@@@   @@@@@@@@  @@@@@@@@  @@@@@@@        //
+    //       @@@@@@@   @@@@@@@@  @@@@ @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@@@@@@       //
+    //       !@@       @@!  @@@  @@!@!@@@  @@!  @@@  @@!       @@!       @@!  @@@       //
+    //       !@!       !@!  @!@  !@!!@!@!  !@!  @!@  !@!       !@!       !@!  @!@       //
+    //        !!@@!!   @!@!@!@!  @!@ !!@!  @!@  !@!  @!!!:!    @!!!:!    @!@@!@!        //
+    //        !!@!!!   !!!@!!!!  !@!  !!!  !@!  !!!  !!!!!:    !!!!!:    !!@!!!         //
+    //            !:!  !!:  !!!  !!:  !!!  !!:  !!!  !!:       !!:       !!:            //
+    //            !:!  :!:  !:!  :!:  !:!  :!:  !:!  :!:       :!:       :!:            //
+    //       :::: ::   ::   :::  ::   ::   :::: ::   :: ::::   :: ::::   ::             //
+    //       :: : :    :    ::   ::   :    :: : :    : :: ::   : :: ::   :              //
+    //                                                                                  //
+    //       WDD Advanced JavaScript                                                    //
+    //       File: Advanced JS Assignment 3                                             //
+    //       Instructor: Brent Scott                                                    //
+    //                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////
+    -->
+    
+    <!--Google fonts link-->
+    <link href="https://fonts.googleapis.com/css?family=Lobster+Two:700%7cVollkorn:400,700,700i&display=swap" rel="stylesheet">
+   
+    <style>
+      /* CSS rule for body tag */
+      body{
+        font-family: Vollkorn, Arial, Tahoma, Helvatica, sans-serif;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 1.5em;
+        margin: 0 auto;
+      }
+      
+      /* CSS rule for div with an id of wrapper */
+      #wrapper{
+        width: 960px;
+        margin: 0 auto;
+        background-color: #eee;
+        box-shadow: 0px 3px 7px rgba(0,0,0,0.7);
+      }
+      
+      /* CSS rule for header tag */
+      header{
+        height: 113px;
+        background: linear-gradient(#666, #82724d);
+        color: #eee;
+      }
+      
+      /* CSS rule for h1 tag */
+      h1{
+        font-family: Lobster Two, Arial, Tahoma, Helvatica, sans-serif;
+        font-weight: 700;
+        margin: 0;
+        padding: 45px 0 20px 7px;
+      }
+      
+      /* CSS rule for h2 tag */
+      h2{
+        font-family: Vollkorn, Arial, Tahoma, Helvatica, sans-serif;
+        font-weight: 700;
+        font-style: italic;
+        text-align: center;
+        margin-top: 35px;
+        color: #eee;
+        background-color: #82724d;
+        box-shadow: 0px 3px 7px rgba(0,0,0,0.7);
+      }
+      
+      /* CSS rule for div inside field set */
+      fieldset div{
+        margin: 7px 0 7px 0;
+      }
+      
+      /* CSS rule for label tag */
+      label{
+        float: left;
+        min-width: 200px;
+      }
+      
+      /* CSS rule for any tag with an ID of save_info */
+      #save_info{
+        border: 1px solid #000;
+        border-radius: 5px;
+        color: #eee;
+        background: #82724d;
+        box-shadow: 2px 2px 15px 0 #000;
+        padding: 7px 40px 7px 40px;
+        margin-top: 10px;
+        font-size: 1.5em;
+      }
+      
+      /* CSS rule for any tag with an ID of movables */
+      #movables{
+        position: relative;
+        width: 100%;
+        min-height: 500px;
+      }
+      
+      /* CSS rule for #bic_bike */
+      #movables #bic_bike{
+        position: absolute;
+        top: 50px;
+        left: 80px;
+      }
+      
+      /* CSS rule for #mtb_hel */
+      #movables #mtb_hel{
+        position: absolute;
+        top: 90px;
+        left: 432px;
+        width: 100px;
+        height: 100px;
+      }
+      
+      /* CSS rule for #mtb_bike */
+      #movables #mtb_bike{
+        position: absolute;
+        top: 50px;
+        right: 80px;
+      }
+      
+      /* CSS rule for #bic_hel */
+      #movables #bic_hel{
+        position: absolute;
+        top: 300px;
+        left: 432px;
+        width: 100px;
+        height: 100px;
+      }
+      
+      /* CSS rule for image in canvas tag */
+      #canvas_image{
+        visibility: hidden;
+        opacity: 0;
+        display: none;
+      }
+      
+      /* CSS rule for page footer */
+      footer{
+        height: 100px;
+        color: #eee;
+        padding: 46px 10px 0px 10px;
+        background: #333;
+        text-align: center;
+      }
+    </style>
+    
+  </head>
+  
+  <body>
+   <!-- Main HTML container -->
+    <div id="wrapper">
+     <!-- Page Header -->
+      <header id="head">
+        <h1>Welcome to the Local Storage World!!!</h1>
+      </header>
+      
+      <!-- Page section -->
+      <section>
+       <!-- Page form -->
+        <form method="post" id="form_storage" action="">
+         <!-- Form fieldset -->
+          <fieldset>
+           <!-- Form legend -->
+            <legend>Storage Access</legend>
+            <div><!-- First name div -->
+              <label for="f_name">First Name:</label>
+              <input type="text" id="f_name" name="f_name" required />
+            </div>
+            <div><!-- Last name div -->
+              <label for="l_name">Last Name:</label>
+              <input type="text" id="l_name" name="l_name" required />
+            </div>
+            <div><!-- Background Color div -->
+              <label for="bg_color">Choose a background:</label>
+              <input type="color" id="bg_color" name="bg_color" />
+            </div>
+          </fieldset>
+        </form>
+        <!-- Div containing page button element -->
+        <div style="text-align: center;">
+          <button id="save_info">Register</button>
+        </div>
+        
+        <!-- Second level page heading -->
+        <h2 id="drag_head">Secure the Kids!!!</h2>
+        <p style="padding-left: 7px; margin-bottom: 0;"><strong>Note:</strong> Drag and drop the required helmet exactly below the correct rider in the dark space.</p>
+        <!-- Div containing all the movables for drag and drop action -->
+        <div id="movables">
+          <div><!-- Div containing item to be dragged -->
+            <img id="bic_hel" ondragstart="dragImg(event);" src="Images/Bicycle_Helmet.png" alt="Bicycle Helmet" />
+          </div>
+          <div>
+            <img id="mtb_hel" ondragstart="dragImg(event);" src="Images/Motor_Bike_Helmet.png" alt="Motor Bike Helmet" />
+          </div><!-- Div containing item on which images can be dragged -->
+          <div>
+            <img id="mtb_bike" ondragover="allowDrop(event);" ondrop="dropIt(event);" src="Images/Motor_Bike.png" alt="Motor bike" />
+          </div>
+          <div>
+            <img id="bic_bike" ondragover="allowDrop(event);" ondrop="dropIt(event);" src="Images/Bicycle.png" alt="bicycle" />
+          </div>
+        </div>
+      </section>
+      <!-- Image to be placed on canvas -->
+      <img id="canvas_image" src="Images/Gamer.png" alt="Gamer">
+      <canvas id="canvas_title">
+        Sorry, your browser doesn't support canvas. Too bad, so sad!
+      </canvas>
+      <!-- Page footer -->
+      <footer>
+        &copy;&nbsp;Sandeep Pardeshi
+      </footer>
+    </div>
+    <noscript>
+      Page content can only be saved and viewed; if JavaScript is enabled.
+    </noscript>
+    
+    <script>
+      // Global Variables
+      var visits;
+      var header_item;
+      var drag_info;
+      
+      // Global Canvas Variables
+      var img;
+      var cnvs;
+      var cx;
+      var posx = 50;
+      var speedx = 3;
+      
+      /* Starting function to save information on local storage */
+      function saveInfo(){
+        // Checking if browser supports local storage.
+        if(typeof(Storage) !== "undefined"){
+          // Getting form element.
+          var form_element = document.getElementById("form_storage");
+          var form_key;
+          var form_value;
+          
+          // Grabbing the form element key in variables
+          for(i = 0; i < form_element.elements.length; i++){
+            form_key = form_element.elements[i].id;
+            form_value = form_element.elements[i].value;
+            
+            // Setting key in local storage
+            localStorage.setItem(form_key, form_value);
+          }
+          
+          // Updating header tag with local storage
+          header_item = document.getElementById("head");
+          header_item.innerHTML = "<h1>Hello! " + localStorage.getItem("f_name") + ", you are awesome...</h1>";
+          
+          // Getting color from local storage and setting body and h2 background color
+          if(localStorage.getItem("bg_color")){
+            var set_bg = localStorage.getItem("bg_color");
+            document.body.style.backgroundColor = set_bg;
+            document.getElementById("drag_head").style.backgroundColor = set_bg;
+          }
+        }
+      }
+      /* Ending function to save information on local storage */
+      
+      /*---- Start of Drag and Drop Image activity ----*/
+      // Function to initiate item drag
+      function dragImg(evt){
+        evt.dataTransfer.setData("helmet_id", evt.target.id);
+      }
+      // Function to prevent default browser drop functionality
+      function allowDrop(evt){
+        evt.preventDefault();
+      }
+      // Function to drop an item over another
+      function dropIt(evt){
+        // Prevent default browser drop function
+        evt.preventDefault();
+        var data = evt.dataTransfer.getData("helmet_id");
+        // Getting the ID of image to be dropped on
+        var vehicle_id = evt.target.id;
+        if(data.split('_')[0] == vehicle_id.split('_')[0]){
+          alert("That's Good");
+          // Checking the correct bicycle id
+          if(vehicle_id == "bic_bike"){
+            evt.target.appendChild(document.getElementById(data));
+            document.getElementById(data).style.width = "150px";
+            document.getElementById(data).style.height = "150px";
+            document.getElementById(data).style.top = "-1px";
+            document.getElementById(data).style.left = "79px";
+            
+          }// Checking the correct motorbike id
+          else if(vehicle_id == "mtb_bike"){
+            evt.target.appendChild(document.getElementById(data));
+            document.getElementById(data).style.width = "65px";
+            document.getElementById(data).style.height = "65px";
+            document.getElementById(data).style.top = "6px";
+            document.getElementById(data).style.left = "64px";
+          }
+        }// If wrong image is placed on another msg will be displayed
+        else{
+          alert("You are gonna get him killed!!!");
+        }
+      }
+      /*---- End of Drag and Drop Image activity ----*/
+      
+      /* Start of Canvas Function */
+      function animate(){
+        cx.clearRect(0,0,600,600);
+        cx.beginPath();
+        
+        cx.lineWidth = 1;
+        // Drawing an image on the canvas
+        cx.drawImage(img, posx, 0);        
+        
+        // Image will touch the side of the box and return back.
+        if(posx > 500 || posx < 10){
+          speedx = -speedx;
+        }       
+        posx += speedx;
+      }
+      /* End Of canvas Function*/
+      
+      // Waits until the page and JS is loaded
+      window.onload = function(){
+        
+        /*---- Start of Local Storage activity ----*/
+        if(localStorage.getItem("f_name")){
+          header_item = document.getElementById("head");
+          
+          header_item.innerHTML = "<h1>Welcome! " + localStorage.getItem("f_name") + ", you have visited " + localStorage.getItem("visitcount") + " times!!!</h1>";
+        }
+        
+        // Call the main function on button press.
+        document.getElementById("save_info").addEventListener("click", function(){
+          saveInfo();
+        });
+        
+        // Checking if variable visitcount is set or not
+        if(localStorage.getItem("visitcount")){
+          visits = localStorage.getItem("visitcount");
+          visits++;
+        }
+        else{
+          visits = 1;
+        }
+        // Setting visitcount variable for the page which will update site hit count
+        localStorage.setItem("visitcount", visits);
+        /*---- End of Local Storage activity ----*/
+        
+        /* Start Of Canvas */
+        // Setting canvas element in a variable
+        cnvs = document.getElementById("canvas_title");
+        cnvs.width = 1200,
+        cnvs.height = 200,
+        cnvs.style.width = "960px";
+        cnvs.style.height = "230px";
+        cnvs.style.cursor = "none";
+        
+        cx = cnvs.getContext('2d');
+        cx.scale(2,2);
+        
+        var my_int = setInterval("animate()",20);
+        img = document.getElementById("canvas_image");
+        /* End Of Canvas*/
+      }
+      
+      
+    </script>
+    
+  </body>
+</html>
